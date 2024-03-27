@@ -4,57 +4,69 @@
 
 using namespace std;
 
-void CopyToClipboard(const string& text);
-
-Password::Password(int length)
-: mWords("") 
-, mLength(length)
+Password::Password()
+: mCharacters("") 
+, mLength(12)
 {
-	addBaseWords();
-	string specialSymbols("!@#$%%^&*_-+=().,?<>;:[]");
-	mWords += specialSymbols;
+	addDigits();
+	addAlpha();
+	addSymbols();
 	shuffleString();
+}
+void	Password::SetLength(size_t length)
+{
+	mLength = length;
 }
 void	Password::PrintPassword(void)
 {
-	if (mLength > mWords.length())
+	if (mLength > mCharacters.length())
 	{
 		throw "\033[0;31mError\nPassword length is too long !\033[0m";
 	}
-	CopyToClipboard(mWords.substr(0, mLength));
-	cout << mWords.substr(0, mLength) << endl;
+
+	const string password = mCharacters.substr(0, mLength);
+	CopyToClipboard(password);
+	LogPasswordToCSV(password);
 }
-void Password::addBaseWords(void)
+void Password::addDigits(void)
 {
 	// Digits
 	for (char word = '0'; word <= '9'; word++)
 	{
-		mWords += word;
+		mCharacters += word;
 	}
+}
+void Password::addAlpha(void)
+{
 	// Lowercase
 	for (char word = 'a'; word <= 'z'; word++)
 	{
-		mWords += word;
+		mCharacters += word;
 	}
 	// Uppercase
 	for (char word = 'A'; word <= 'Z'; word++)
 	{
-		mWords += word;
+		mCharacters += word;
 	}
+}
+void Password::addSymbols(void)
+{
+	string specialSymbols("~!@#$%^&*-_+=:;,.");
+	mCharacters += specialSymbols;
 }
 void Password::shuffleString(void)
 {
 	string newWords("");
 
-	while (!mWords.empty())
+	while (!mCharacters.empty())
 	{
 		random_device rd;
 		mt19937 gen(rd());
-		uniform_int_distribution<> dis(0, mWords.length() - 1);
+		uniform_int_distribution<> dis(0, mCharacters.length() - 1);
 
 		size_t idx = dis(gen);
-		newWords += mWords[idx];
-		mWords.erase(idx, 1);
+		newWords += mCharacters[idx];
+		mCharacters.erase(idx, 1);
 	}
-	mWords = newWords;
+	mCharacters = newWords;
 }

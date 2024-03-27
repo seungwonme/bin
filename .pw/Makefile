@@ -21,7 +21,9 @@ RESET      := \033[0m
 SRC_DIR := ./src
 INCLUDE := -I./inc
 
-SRC        := pw.cpp Password.cpp
+SRC        := pw.cpp \
+              Password.cpp \
+			  csv.cpp 
 OBJC_SRC   := copy.mm
 # OBJ        := $(SRC:.cpp=.o) $(OBJC_SRC:.mm=.o)
 OBJ        := $(addprefix $(SRC_DIR)/, $(SRC:.cpp=.o)) $(addprefix $(SRC_DIR)/, $(OBJC_SRC:.mm=.o))

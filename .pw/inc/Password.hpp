@@ -7,11 +7,17 @@ using namespace std;
 class Password
 {
 private:
-	string mWords;
+	string mCharacters;
 	size_t mLength;
-	void addBaseWords(void);
+	void addAlpha(void);
+	void addDigits(void);
+	void addSymbols(void);
 	void shuffleString(void);
 public:
-	Password(int length = 10);
+	Password();
+	void	SetLength(size_t length);
 	void	PrintPassword(void);
 };
+
+void CopyToClipboard(const std::string& text);
+void LogPasswordToCSV(const std::string &password);

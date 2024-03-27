@@ -7,8 +7,11 @@ using namespace std;
 int	main(int ac, const char* av[])
 {
 	Password pw;
-	(void)ac, (void)av;
 
+	if (ac == 2)
+	{
+		pw.SetLength(atoi(av[1]));
+	}
 	// // help
 	// if (string(av[1]) == "-h" || string(av[1]) == "--help")
 	// {
