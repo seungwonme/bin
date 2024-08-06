@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+// #include "ANSI.hpp"
 using namespace std;
 
 static void	PrintColor(void);
@@ -8,9 +9,12 @@ static void PrintGrammar(void);
 
 int	main(int ac, char **av)
 {
+	// (void)ac, (void)av;
+	// ANSI ansi;
+	// cout << ansi << "Hello, World!" << ansi.Reset() << endl;
 	if (ac == 1)
 	{
-		PrintColor();
+		PrintColor(); 
 	}
 	else if (string(av[1]) == "-t" || string(av[1]) == "--table")
 	{
@@ -25,7 +29,6 @@ int	main(int ac, char **av)
 		cout << "Usage: ansi [-t | --table] [-g | --grammar]" << endl;
 		return 1;
 	}
-
 	return 0;
 }
 

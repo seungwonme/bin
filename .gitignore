@@ -1,5 +1,13 @@
-.vscode 
+# MacOS
 .DS_Store
+
+# Visual Studio Code
+.vscode 
+
+# C/C++
 *.o
 a.out
+.clang-format
+
+# _pw
 passwords.csv

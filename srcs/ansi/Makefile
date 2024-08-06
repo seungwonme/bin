@@ -1,12 +1,10 @@
 .SUFFIXES : .cpp .o .mm
 
-NAME       := ../pw
-CXX        := clang++
-CFLAGS     := -std=c++11 -Werror -Wall -Wextra
+NAME       := ../ansi
+CXX        := c++
+CFLAGS     := -std=c++11 #-Werror -Wall -Wextra
 DEBUG      := -g
 MEMORY     := -g3 -fsanitize=address
-OBJCXX     := g++
-FRAMEWORKS := -framework Foundation -framework AppKit
 
 BLACK      := \033[30m
 RED        := \033[31m
@@ -18,15 +16,12 @@ CYAN       := \033[36m
 WHITE      := \033[37m
 RESET      := \033[0m
 
-SRC_DIR := ./src
-INCLUDE := -I./inc
+SRC_DIR    := ./src
+INCLUDE    := -I./inc
 
-SRC        := pw.cpp \
-              Password.cpp \
-			  csv.cpp 
-OBJC_SRC   := copy.mm
-# OBJ        := $(SRC:.cpp=.o) $(OBJC_SRC:.mm=.o)
-OBJ        := $(addprefix $(SRC_DIR)/, $(SRC:.cpp=.o)) $(addprefix $(SRC_DIR)/, $(OBJC_SRC:.mm=.o))
+SRC        := main.cpp 
+OBJ        := $(SRC:.cpp=.o)
+OBJ        := $(addprefix $(SRC_DIR)/, $(SRC:.cpp=.o))
 
 all: $(NAME)
 	@echo "$(GREEN)$(NAME) created successfully$(RESET)"
@@ -37,10 +32,6 @@ $(NAME): $(OBJ)
 
 %.o: %.cpp
 	@$(CXX) $(CFLAGS) -c $< -o $@ $(INCLUDE)
-	@echo "$(CYAN)Compiled:$(RESET) $< -> $@"
-
-%.o: %.mm
-	@$(OBJCXX) $(CFLAGS) -c $< -o $@ $(INCLUDE)
 	@echo "$(CYAN)Compiled:$(RESET) $< -> $@"
 
 clean:
