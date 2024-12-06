@@ -4,11 +4,7 @@
 #include <string>
 using namespace std;
 
-const string ESCAPE[3] = {
-    "\033", 
-    "\x1b", 
-    "\e"
-};
+const string ESCAPE[3] = {"\033", "\x1b", "\e"};
 
 namespace color
 {
@@ -40,7 +36,7 @@ namespace color
     const char* BG_DEFAULT = "\033[49m";
 
     const char* RESET = "\033[0m";
-}
+}  // namespace color
 
 enum class eStyleType
 {
@@ -82,16 +78,11 @@ private:
     eStyleType mStyleType;
     eColorType mColorType;
     eColor mColor;
+
 public:
     ANSI();
     ~ANSI();
     string Reset();
-    friend ostream& operator<<(ostream& os, const ANSI& ansi)
-    {
-        os << ansi.mEscape << "[" << ansi.mStyleType << ";"
-        << ansi.mColorType << ansi.mColor << "m";
-        return os;
-    }
 };
 
 #endif

@@ -1,16 +1,25 @@
 #include "FileCreator.hpp"
+#include <errno.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <sys/stat.h>
-#include <errno.h>
 
 FileCreator::FileCreator(const string& path)
 : mFullPath(path)
 , mFileVec()
 {
     splitPath();
+    for (size_t i = 0; i < mFileVec.size(); i++)
+    {
+        if (isExist(mFileVec[i]))
+            throw "Error: file already exists";
+        if (!createDir(mFileVec[i]))
+            throw "Error: failed to create directory";
+        if (!changeDirectory(mFileVec[i]))
+            throw "Error: failed to change directory";
+    }
 }
 FileCreator::~FileCreator()
 {
@@ -39,9 +48,9 @@ bool FileCreator::changeDirectory(const string& path)
 {
     return (chdir(path.c_str()) == 0);
 }
-bool FileCreator::createDir(const string& path)
+bool FileCreator::createDir(const string& dir)
 {
-    return (mkdir(path.c_str(), 755) == 0);
+    return (mkdir(dir.c_str(), 0755) == 0);
 }
 bool FileCreator::createFile(const string& path)
 {
@@ -55,5 +64,5 @@ bool FileCreator::createFile(const string& path)
 }
 bool FileCreator::isExist(const string& path)
 {
-    return access(path.c_str(), F_OK);
+    return (access(path.c_str(), F_OK) == 0);
 }

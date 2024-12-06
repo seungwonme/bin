@@ -19,14 +19,14 @@ void PrintRainbow(const char* str)
     for (size_t i = 0; i < strlen(str); i++)
     {
         if (IsKorean(str[i]))
-            cout << "\033[9" << rainbow_colors[idx++ % 7] << 'm' << str[i++] << str[i++] << str[i]; 
+            cout << "\033[9" << rainbow_colors[idx++ % 7] << 'm' << str[i++] << str[i++] << str[i];
         else
             cout << "\033[9" << rainbow_colors[idx++ % 7] << 'm' << str[i];
     }
     cout << endl;
 }
 
-// https://wondangcom.tistory.com/510
+// https://klkl0.tistory.com/52
 bool IsKorean(const char c)
 {
     return (c & 0x80);

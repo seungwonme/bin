@@ -1,6 +1,6 @@
 .SUFFIXES : .cpp .o .mm
 
-NAME       := ../pw
+NAME       := pw
 CXX        := c++
 OBJCXX     := g++
 CFLAGS     := -std=c++11 -Werror -Wall -Wextra
@@ -25,9 +25,10 @@ SRC        := main.cpp \
               Password.cpp \
               csv.cpp 
 OBJC_SRC   := copy.mm
-OBJ        := $(addprefix $(SRC_DIR)/, $(SRC:.cpp=.o)) $(addprefix $(SRC_DIR)/, $(OBJC_SRC:.mm=.o))
+OBJ        := $(SRC:.cpp=.o) $(OBJC_SRC:.mm=.o)
 
 all: $(NAME)
+	@mv $(NAME) ~/bin/
 	@echo "$(GREEN)$(NAME) created successfully$(RESET)"
 
 $(NAME): $(OBJ)
@@ -35,11 +36,11 @@ $(NAME): $(OBJ)
 	@echo "$(WHITE)Creating $@$(RESET)"
 
 %.o: %.cpp
-	@$(CXX) $(CFLAGS) -c $< -o $@ $(INCLUDE)
+	@$(CXX) $(CFLAGS) -c $< -o $@
 	@echo "$(CYAN)Compiled:$(RESET) $< -> $@"
 
 %.o: %.mm
-	@$(OBJCXX) $(CFLAGS) -c $< -o $@ $(INCLUDE)
+	@$(OBJCXX) $(CFLAGS) -c $< -o $@
 	@echo "$(CYAN)Compiled:$(RESET) $< -> $@"
 
 clean:

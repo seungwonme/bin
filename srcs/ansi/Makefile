@@ -1,8 +1,8 @@
 .SUFFIXES : .cpp .o .mm
 
-NAME       := ../ansi
+NAME       := ansi
 CXX        := c++
-CFLAGS     := -std=c++11 #-Werror -Wall -Wextra
+CFLAGS     := -std=c++11 -Werror -Wall -Wextra
 DEBUG      := -g
 MEMORY     := -g3 -fsanitize=address
 
@@ -16,22 +16,19 @@ CYAN       := \033[36m
 WHITE      := \033[37m
 RESET      := \033[0m
 
-SRC_DIR    := ./src
-INCLUDE    := -I./inc
-
-SRC        := main.cpp 
+SRC        := main.cpp
 OBJ        := $(SRC:.cpp=.o)
-OBJ        := $(addprefix $(SRC_DIR)/, $(SRC:.cpp=.o))
 
 all: $(NAME)
+	@mv $(NAME) ~/bin/
 	@echo "$(GREEN)$(NAME) created successfully$(RESET)"
 
 $(NAME): $(OBJ)
-	@$(CXX) $(CFLAGS) $(OBJ) -o $(NAME) $(FRAMEWORKS)
+	@$(CXX) $(CFLAGS) $(OBJ) -o $(NAME)
 	@echo "$(WHITE)Creating $@$(RESET)"
 
 %.o: %.cpp
-	@$(CXX) $(CFLAGS) -c $< -o $@ $(INCLUDE)
+	@$(CXX) $(CFLAGS) -c $< -o $@
 	@echo "$(CYAN)Compiled:$(RESET) $< -> $@"
 
 clean:

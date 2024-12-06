@@ -5,7 +5,7 @@ int main(const int ac, const char* av[])
 {
     if (ac == 1)
     {
-        cout << "Usage: cre <path>\n";
+        cerr << "Usage: cre <path>\n";
         return 1;
     }
 
@@ -15,9 +15,10 @@ int main(const int ac, const char* av[])
         FileCreator fc(path);
         fc.Print();
     }
-    catch (const FileCreator::InvalidPathException& e)
+    catch (const char* e)
     {
-        cerr << "cre: " << e.what() << ": Invalid file path\n";
+        cerr << "cre: " << e << '\n';
+        return 1;
     }
     return 0;
 }

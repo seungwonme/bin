@@ -11,3 +11,11 @@ a.out
 
 # _pw
 passwords.csv
+
+# OrbStack
+docker
+docker-credential-osxkeychain
+kubectl
+orb
+orbctl
+

@@ -1,6 +1,6 @@
 .SUFFIXES : .cpp .o .mm
 
-NAME       := ../../nconvert
+NAME       := nconvert
 CXX        := c++
 OBJCXX     := g++
 CFLAGS     := -std=c++11 -Werror -Wall -Wextra
@@ -17,13 +17,11 @@ CYAN       := \033[36m
 WHITE      := \033[37m
 RESET      := \033[0m
 
-SRC_DIR    := ./src
-INCLUDE    := -I./inc
-
 SRC        := nconvert.cpp
 OBJ        := $(SRC:.cpp=.o)
 
 all: $(NAME)
+	@mv $(NAME) ~/bin/
 	@echo "$(GREEN)$(NAME) created successfully$(RESET)"
 
 $(NAME): $(OBJ)
@@ -31,11 +29,11 @@ $(NAME): $(OBJ)
 	@echo "$(WHITE)Creating $@$(RESET)"
 
 %.o: %.cpp
-	@$(CXX) $(CFLAGS) -c $< -o $@ $(INCLUDE)
+	@$(CXX) $(CFLAGS) -c $< -o $@
 	@echo "$(CYAN)Compiled:$(RESET) $< -> $@"
 
 %.o: %.mm
-	@$(OBJCXX) $(CFLAGS) -c $< -o $@ $(INCLUDE)
+	@$(OBJCXX) $(CFLAGS) -c $< -o $@
 	@echo "$(CYAN)Compiled:$(RESET) $< -> $@"
 
 clean:
