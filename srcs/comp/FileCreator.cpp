@@ -6,23 +6,27 @@
 #include <iostream>
 #include <sstream>
 
-FileCreator::FileCreator(const string& compName)
+FileCreator::FileCreator(const string& compName, const bool withCSS)
 {
     string dirName = compName;
     dirName[0] = tolower(dirName[0]);
-    const string tsx = compName + ".tsx";
-    const string css = compName + ".module.css";
+    const string fileName = compName + ".tsx";
+    const string moduleCss = withCSS ? compName + ".module.css" : "";
 
     if (isExist(dirName))
         throw "Error: " + dirName + " directory already exists";
     if (!createDir(dirName))
-        throw "Error: failed to create directory";
+        throw "Error: failed to create " + dirName + " directory";
     if (!changeDirectory(dirName))
-        throw "Error: failed to change directory";
-    if (!createFile(tsx))
-        throw "Error: failed to create file " + tsx;
-    if (!createFile(css))
-        throw "Error: failed to create file " + css;
+        throw "Error: failed to change " + dirName + " directory";
+    if (!createFile(fileName))
+        throw "Error: failed to create file " + fileName;
+    if (!addContents(fileName, compName, withCSS))
+        throw "Error: failed to add contents to " + fileName;
+    if (withCSS && !createFile(moduleCss))
+        throw "Error: failed to create file " + moduleCss;
+    if (!changeDirectory(".."))
+        throw "Error: failed to change to parent directory";
 }
 FileCreator::~FileCreator()
 {
@@ -48,4 +52,28 @@ bool FileCreator::createFile(const string& path)
 bool FileCreator::isExist(const string& path)
 {
     return (access(path.c_str(), F_OK) == 0);
+}
+bool FileCreator::addContents(const string& fileName, const string& compName, bool withCSS)
+{
+    ofstream file(fileName, ios::app);
+    if (!file.is_open())
+    {
+        return false;
+    }
+    if (withCSS)
+    {
+        file << "import classes from './" << compName << ".module.css';\n";
+        file << "\n";
+    }
+    file << "export default function " << compName << "() {\n";
+    file << "  return (\n";
+    file << "    \n";
+    file << "  );\n";
+    file << "}";
+    file.close();
+    if (file.fail())
+    {
+        return false;
+    }
+    return true;
 }

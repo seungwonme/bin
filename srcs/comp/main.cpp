@@ -5,25 +5,32 @@ int main(const int ac, const char* av[])
 {
     if (ac == 1)
     {
-        cerr << "Usage: comp <component name>\n";
+        cerr << aec::fg::RED << "Usage: comp <component name>" << aec::RESET << endl;
         return 1;
     }
 
-    try
+    size_t cur = 1;
+    bool withCSS = false;
+    if (string(av[1]) == "--css" || string(av[1]) == "-c")
     {
-        const string path = av[1];
-        FileCreator fc(path);
-        cout << path << " component created\n";
+        withCSS = true;
+        cur++;
     }
-    catch (const char* e)
+
+    for (int i = cur; i < ac; i++)
     {
-        cerr << "comp: " << e << '\n';
-        return 1;
+        try
+        {
+            const string compName = av[i];
+            FileCreator fc(compName, withCSS);
+            cout << compName << " component created\n";
+        }
+        catch (const string& e)
+        {
+            cerr << aec::fg::RED << "comp: " << e << aec::RESET << endl;
+            return 1;
+        }
     }
-    catch (const string& e)
-    {
-        cerr << "comp: " << e << '\n';
-        return 1;
-    }
+
     return 0;
 }
