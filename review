@@ -1,0 +1,62 @@
+#!/bin/sh
+
+function usage() {
+cat <<EOF
+Usage: $0 [model]
+    model: The model to use for generating the review. Default is "qwen2.5-coder".
+EOF
+}
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  usage
+  exit 1
+fi
+
+api_url="http://localhost:11434/api/generate"
+model="${1:-qwen2.5-coder}"
+review_file="review.md"
+changed_file_names=$(git diff --name-only --diff-filter=M)
+
+> $review_file
+
+function make_prompt() {
+  file_name=$1
+
+  cat <<EOF
+You are a software developer bot responsible for code reviews in the engineering department of a technology/software company.
+- After reviewing code, you write a review summarizing your findings.
+- Include information such as problems found, recommendations for improvement, areas of strength, and an overall assessment of the code quality.
+- Your review should be organized, easy to understand, and provide actionable feedback to the developer.
+- Write your review in Markdown format with headings, lists, code blocks, etc. to make it easier to read.
+Review the code in the following file named "$file_name":
+EOF
+}
+
+function code_review() {
+  file_name=$1
+  file_content=$(cat "$file_name")
+  prompt=$(make_prompt $file_name)
+
+  # Replace "\" to "\\" newlines with "\n", escape double quotes
+  escaped_prompt=$(echo -e "$prompt" | sed 's/\\/\\\\/g' | tr '\n' ' ' | awk '{ gsub(/"/, "\\\""); print }')
+  escaped_file_content=$(echo -e "$file_content" | sed 's/\\/\\\\/g' | tr '\n' ' ' | awk '{ gsub(/"/, "\\\""); print }')
+
+  # Create the JSON payload with properly escaped content
+  json_payload=$(cat <<EOF
+{
+  "model": "$model",
+  "prompt": "$escaped_prompt $escaped_file_content",
+  "stream": false
+}
+EOF
+)
+
+  # Send the request and capture the response
+  res=$(curl -s -H "Content-Type: application/json" "$api_url" -d "$json_payload" | jq -r .response)
+  echo "$res" >> $review_file
+}
+
+for file_name in $changed_file_names; do
+  echo "Reviewing $file_name"
+  code_review $file_name
+done
