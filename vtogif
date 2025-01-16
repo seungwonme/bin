@@ -55,7 +55,7 @@ done
 
 # 입력 파일이 없으면 종료
 if [ -z "$input_file" ]; then
-  echo "사용법: $0 [--fps FPS] [-width WIDTH] input_file"
+  echo "사용법: $0 [--fps FPS] [--width WIDTH] input_file"
   exit 1
 fi
 
