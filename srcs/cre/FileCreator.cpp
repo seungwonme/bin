@@ -9,9 +9,10 @@
 FileCreator::FileCreator(const string& path)
 : mFullPath(path)
 , mFileVec()
+, mIsDirectory(path[path.length() - 1] == '/')
 {
     splitPath();
-    for (size_t i = 0; i < mFileVec.size(); i++)
+    for (size_t i = 0; i < mFileVec.size() - 1; i++)
     {
         if (isExist(mFileVec[i]))
             throw "Error: file already exists";
@@ -20,7 +21,23 @@ FileCreator::FileCreator(const string& path)
         if (!changeDirectory(mFileVec[i]))
             throw "Error: failed to change directory";
     }
+
+    const string& lastElement = mFileVec.back();
+    if (isExist(lastElement))
+        throw "Error: file already exists";
+
+    if (mIsDirectory)
+    {
+        if (!createDir(lastElement))
+            throw "Error: failed to create directory";
+    }
+    else
+    {
+        if (!createFile(lastElement))
+            throw "Error: failed to create file";
+    }
 }
+
 FileCreator::~FileCreator()
 {
 }
@@ -43,6 +60,8 @@ void FileCreator::splitPath(void)
             mFileVec.push_back(tk);
         }
     }
+    if (mFileVec.empty())
+        throw "Error: invalid path";
 }
 bool FileCreator::changeDirectory(const string& path)
 {

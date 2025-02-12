@@ -1,3 +1,0 @@
-#!/bin/sh
-
-pip uninstall -y $(pip list --format=freeze | awk -F"==" "{print $1}" | grep -v pip | tr "\n" " " )

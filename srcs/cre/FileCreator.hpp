@@ -11,6 +11,7 @@ class FileCreator
 private:
     const string mFullPath;
     vector<const string> mFileVec;
+    bool mIsDirectory;
     void splitPath(void);
     bool changeDirectory(const string& path);
     bool createFile(const string& path);
